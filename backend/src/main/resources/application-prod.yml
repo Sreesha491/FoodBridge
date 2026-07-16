@@ -1,0 +1,28 @@
+# ════════════════════════════════════════════════════════
+#  FoodBridge – Production Profile Configuration
+#  All secrets MUST come from environment variables.
+#  Never commit real credentials to version control.
+# ════════════════════════════════════════════════════════
+
+spring:
+  # ── DevTools disabled in prod ────────────────────────
+  devtools:
+    restart:
+      enabled: false
+    livereload:
+      enabled: false
+
+# ── Actuator: restrict exposure in prod ──────────────
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+# ── Minimal logging in prod ───────────────────────────
+logging:
+  level:
+    root: WARN
+    com.foodbridge: INFO
+    org.springframework.security: WARN
+    org.springframework.data.jpa: WARN

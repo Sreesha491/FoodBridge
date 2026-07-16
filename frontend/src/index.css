@@ -1,0 +1,208 @@
+/**
+ * FoodBridge Global Stylesheet
+ *
+ * Layer order:
+ * 1. @tailwind base     – Tailwind's preflight (CSS reset)
+ * 2. @tailwind components – Tailwind component utilities
+ * 3. @tailwind utilities  – Tailwind utility classes
+ *
+ * Custom styles are added AFTER the Tailwind directives.
+ */
+
+/* ── Tailwind Directives ─────────────────────────────────────────── */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Base / Reset ────────────────────────────────────────────────── */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-neutral-950 text-neutral-100;
+    @apply font-sans antialiased;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* Focus ring – accessible default */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary-500;
+  }
+
+  /* Remove focus ring for mouse users */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading font-semibold leading-tight;
+  }
+
+  a {
+    @apply text-primary-400 hover:text-primary-300 transition-colors duration-200;
+  }
+
+  img, video {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Custom scrollbar (Webkit) */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-neutral-900;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-neutral-600 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-neutral-500;
+  }
+}
+
+/* ── Reusable Component Classes ──────────────────────────────────── */
+@layer components {
+
+  /* ── Buttons ─────────────────────────────────────────────────── */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2;
+    @apply px-5 py-2.5 rounded-xl font-medium text-sm;
+    @apply transition-all duration-200 cursor-pointer;
+    @apply focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply btn bg-primary-600 text-white;
+    @apply hover:bg-primary-500 hover:shadow-glow;
+    @apply focus-visible:ring-primary-500;
+    @apply active:scale-95;
+  }
+
+  .btn-accent {
+    @apply btn bg-accent-500 text-neutral-900;
+    @apply hover:bg-accent-400 hover:shadow-glow-accent;
+    @apply focus-visible:ring-accent-400;
+    @apply active:scale-95;
+  }
+
+  .btn-outline {
+    @apply btn border border-neutral-700 text-neutral-300;
+    @apply hover:border-primary-500 hover:text-primary-400 hover:bg-primary-500/5;
+    @apply focus-visible:ring-neutral-500;
+    @apply active:scale-95;
+  }
+
+  .btn-ghost {
+    @apply btn text-neutral-400;
+    @apply hover:bg-neutral-800 hover:text-neutral-100;
+    @apply active:scale-95;
+  }
+
+  /* ── Cards ───────────────────────────────────────────────────── */
+  .card {
+    @apply bg-neutral-900 rounded-2xl border border-neutral-800;
+    @apply shadow-card transition-all duration-300;
+  }
+
+  .card-hover {
+    @apply card hover:border-neutral-700 hover:shadow-card-hover hover:-translate-y-0.5;
+  }
+
+  /* ── Glassmorphism ───────────────────────────────────────────── */
+  .glass {
+    @apply bg-white/5 backdrop-blur-md border border-white/10;
+    @apply rounded-2xl;
+  }
+
+  .glass-dark {
+    @apply bg-neutral-950/80 backdrop-blur-md border border-neutral-800/50;
+  }
+
+  /* ── Form Inputs ─────────────────────────────────────────────── */
+  .input {
+    @apply w-full px-4 py-2.5 rounded-xl;
+    @apply bg-neutral-800 border border-neutral-700 text-neutral-100;
+    @apply placeholder:text-neutral-500;
+    @apply transition-colors duration-200;
+    @apply focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/50;
+  }
+
+  .input-label {
+    @apply block text-sm font-medium text-neutral-300 mb-1.5;
+  }
+
+  /* ── Badges ──────────────────────────────────────────────────── */
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-green  { @apply badge bg-primary-500/20 text-primary-400; }
+  .badge-amber  { @apply badge bg-accent-500/20 text-accent-400; }
+  .badge-red    { @apply badge bg-red-500/20 text-red-400; }
+  .badge-blue   { @apply badge bg-blue-500/20 text-blue-400; }
+  .badge-gray   { @apply badge bg-neutral-700 text-neutral-300; }
+
+  /* ── Section Container ───────────────────────────────────────── */
+  .container-section {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* ── Gradient Text ───────────────────────────────────────────── */
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary-400 to-accent-400;
+    @apply bg-clip-text text-transparent;
+  }
+
+  /* ── Divider ─────────────────────────────────────────────────── */
+  .divider {
+    @apply border-t border-neutral-800 my-8;
+  }
+}
+
+/* ── Utility Additions ───────────────────────────────────────────── */
+@layer utilities {
+  /* Prevent content shift during font load */
+  .font-heading {
+    font-family: 'Outfit', 'Inter', system-ui, sans-serif;
+  }
+
+  /* Hero gradient background */
+  .bg-hero-gradient {
+    background: radial-gradient(
+      ellipse 80% 50% at 50% -20%,
+      rgba(22, 163, 74, 0.25) 0%,
+      transparent 60%
+    ),
+    linear-gradient(180deg, #0a0f0a 0%, #020617 100%);
+  }
+
+  /* Subtle noise texture overlay */
+  .noise-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+}

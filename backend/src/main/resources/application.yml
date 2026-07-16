@@ -1,0 +1,117 @@
+# ════════════════════════════════════════════════════════════
+#  FoodBridge – Main Application Configuration
+#  Active profile is set by SPRING_PROFILES_ACTIVE env var.
+#  Dev-specific overrides live in application-dev.yml.
+# ════════════════════════════════════════════════════════════
+
+spring:
+  application:
+    name: foodbridge-backend
+
+  # ── Profile Activation ──────────────────────────────────
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+  # ── MySQL DataSource ────────────────────────────────────
+  datasource:
+    url: ${MYSQL_URL:jdbc:mysql://localhost:3306/foodbridge?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&characterEncoding=UTF-8}
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:sreesha@167}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      pool-name: FoodBridgeHikariPool
+      maximum-pool-size: 10
+      minimum-idle: 2
+      idle-timeout: 300000
+      connection-timeout: 20000
+      max-lifetime: 1200000
+
+  # ── JPA / Hibernate ─────────────────────────────────────
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+        globally_quoted_identifiers: false
+        jdbc:
+          time_zone: UTC
+
+  # ── Jackson JSON ─────────────────────────────────────────
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      write-dates-as-timestamps: false
+      indent-output: false
+    deserialization:
+      fail-on-unknown-properties: false
+    time-zone: UTC
+
+# ── Server ────────────────────────────────────────────────
+server:
+  port: ${SERVER_PORT:8081}
+  servlet:
+    context-path: /api
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: never
+    include-exception: false
+
+# ── Actuator ──────────────────────────────────────────────
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when-authorized
+  info:
+    env:
+      enabled: true
+
+# ── Application Info ──────────────────────────────────────
+info:
+  app:
+    name: FoodBridge
+    description: Smart Food Waste Reduction & Donation Platform
+    version: 1.0.0
+    phase: Production-Ready
+
+# ── SpringDoc / OpenAPI ───────────────────────────────────
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    try-it-out-enabled: true
+    operations-sorter: method
+    tags-sorter: alpha
+    display-request-duration: true
+    doc-expansion: none
+  show-actuator: false
+
+# ── Logging ───────────────────────────────────────────────
+logging:
+  level:
+    root: INFO
+    com.foodbridge: DEBUG
+    org.springframework.security: WARN
+    org.springframework.data.jpa: WARN
+    org.hibernate.SQL: WARN
+    org.hibernate.type.descriptor.sql: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{requestId}] %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{requestId}] %logger{36} - %msg%n"
+
+# ── Application JWT ───────────────────────────────────────
+app:
+  jwt:
+    secret: ${JWT_SECRET:foodbridge-super-secret-key-change-in-production-minimum-32-chars}
+    expiration-ms: ${JWT_EXPIRATION_MS:86400000}         # 24 hours
+    refresh-expiration-ms: ${JWT_REFRESH_EXPIRATION_MS:604800000}  # 7 days

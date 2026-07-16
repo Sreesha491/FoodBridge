@@ -1,0 +1,25 @@
+# ════════════════════════════════════════════════════════
+#  FoodBridge – Development Profile Configuration
+#  Overrides / supplements application.yml for local dev.
+# ════════════════════════════════════════════════════════
+
+spring:
+  # ── DevTools config ──────────────────────────────────
+  devtools:
+    restart:
+      enabled: true
+      poll-interval: 2s
+    livereload:
+      enabled: false   # disabled to avoid port conflicts
+
+  # ── Show SQL in dev ──────────────────────────────────
+  jpa:
+    show-sql: false    # keep false; use logging.level.org.hibernate.SQL=DEBUG if needed
+
+# ── Verbose logging in dev ────────────────────────────
+logging:
+  level:
+    com.foodbridge: DEBUG
+    org.springframework.security: WARN
+    org.springframework.data.jpa: WARN
+    org.hibernate.SQL: WARN
