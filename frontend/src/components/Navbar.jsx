@@ -33,8 +33,7 @@ function Navbar() {
 
   const navLinks = [
     { label: 'How It Works', href: '/#how-it-works' },
-    { label: 'Donate Food',   href: '/#donate' },
-    { label: 'Find Food',     href: '/#find' },
+    { label: 'Features',     href: '/#features' },
     { label: 'Impact',        href: '/#impact' },
   ];
 

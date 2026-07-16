@@ -305,12 +305,12 @@ function HomePage() {
             a world without food waste.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a id="cta-join-donor" href="#" className="btn-primary px-10 py-3 text-base">
+            <Link id="cta-join-donor" to="/register" className="btn-primary px-10 py-3 text-base">
               Start Donating
-            </a>
-            <a id="cta-join-recipient" href="#" className="btn-outline px-10 py-3 text-base">
+            </Link>
+            <Link id="cta-join-recipient" to="/register" className="btn-outline px-10 py-3 text-base">
               Find Food Near Me
-            </a>
+            </Link>
           </div>
         </div>
       </section>
