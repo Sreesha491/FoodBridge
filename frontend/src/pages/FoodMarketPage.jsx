@@ -53,11 +53,13 @@ function FoodMarketPage() {
         donorId: foodItem.donorId,
         items: [{
           foodItemId: foodItem.id,
+          foodItemName: foodItem.name,
           quantity: foodItem.quantity,
+          unit: foodItem.unit,
           unitPrice: 0 // Free donation
         }],
         totalAmount: 0,
-        deliveryAddress: user.address || 'Default NGO Address'
+        deliveryAddress: user.address || 'NGO Default Address'
       });
       alert('Food requested successfully! Check your Orders tab.');
       fetchFood();
@@ -100,13 +102,13 @@ function FoodMarketPage() {
               
               <div className="food-meta">
                 <span className="meta-item">
-                  <strong>Qty:</strong> {item.quantity} {item.quantityUnit}
+                  <strong>Qty:</strong> {item.quantity} {item.unit}
                 </span>
                 <span className="meta-item">
-                  <strong>Expires:</strong> {new Date(item.expiryTime).toLocaleString()}
+                  <strong>Expires:</strong> {item.expiryDate ? new Date(item.expiryDate).toLocaleString() : 'N/A'}
                 </span>
                 <span className="meta-item">
-                  <strong>Status:</strong> <span className={`status-${item.status.toLowerCase()}`}>{item.status}</span>
+                  <strong>Status:</strong> <span className={`status-${item.status?.toLowerCase()}`}>{item.status}</span>
                 </span>
               </div>
 

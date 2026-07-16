@@ -33,7 +33,7 @@ COPY --from=builder /build/target/*.jar app.jar
 RUN chown -R foodbridge:foodbridge /app
 USER foodbridge
 
-EXPOSE 8080
+EXPOSE 8081
 
 ENTRYPOINT ["java", \
   "-Djava.security.egd=file:/dev/./urandom", \

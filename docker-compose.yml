@@ -2,32 +2,33 @@ version: "3.9"
 
 # ─────────────────────────────────────────────────────────────
 #  FoodBridge – Docker Compose
-#  Services: mongodb | backend | frontend
+#  Services: mysql | backend | frontend
 # ─────────────────────────────────────────────────────────────
 
 services:
 
-  # ── MongoDB 7 ──────────────────────────────────────────────
-  mongodb:
-    image: mongo:7-jammy
-    container_name: foodbridge-mongodb
+  # ── MySQL 8 ────────────────────────────────────────────────
+  mysql:
+    image: mysql:8.0
+    container_name: foodbridge-mysql
     restart: unless-stopped
     environment:
-      MONGO_INITDB_ROOT_USERNAME: foodbridge
-      MONGO_INITDB_ROOT_PASSWORD: foodbridge123
-      MONGO_INITDB_DATABASE: foodbridge
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: foodbridge
+      MYSQL_USER: foodbridge
+      MYSQL_PASSWORD: foodbridge123
     ports:
-      - "27017:27017"
+      - "3306:3306"
     volumes:
-      - mongodb_data:/data/db
+      - mysql_data:/var/lib/mysql
     networks:
       - foodbridge-net
     healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "foodbridge", "-pfoodbridge123"]
       interval: 10s
       timeout: 5s
-      retries: 5
-      start_period: 20s
+      retries: 10
+      start_period: 30s
 
   # ── Spring Boot Backend ────────────────────────────────────
   backend:
@@ -37,15 +38,17 @@ services:
     container_name: foodbridge-backend
     restart: unless-stopped
     depends_on:
-      mongodb:
+      mysql:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: dev
-      MONGODB_URI: mongodb://foodbridge:foodbridge123@mongodb:27017/foodbridge?authSource=admin
-      SERVER_PORT: 8080
+      MYSQL_URL: jdbc:mysql://mysql:3306/foodbridge?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
+      MYSQL_USERNAME: foodbridge
+      MYSQL_PASSWORD: foodbridge123
+      SERVER_PORT: 8081
       JWT_SECRET: foodbridge-super-secret-key-change-in-production-min-32-chars
     ports:
-      - "8080:8080"
+      - "8081:8081"
     networks:
       - foodbridge-net
 
@@ -58,6 +61,8 @@ services:
     restart: unless-stopped
     depends_on:
       - backend
+    environment:
+      VITE_API_HOST: http://backend:8081
     ports:
       - "5173:5173"
     networks:
@@ -65,7 +70,7 @@ services:
 
 # ── Volumes ────────────────────────────────────────────────
 volumes:
-  mongodb_data:
+  mysql_data:
     driver: local
 
 # ── Networks ───────────────────────────────────────────────

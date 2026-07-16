@@ -4,7 +4,7 @@
 [![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.3.5-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white)](https://spring.io/projects/spring-boot)
 [![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-5-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
 [![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 
 > A full-stack platform that intelligently bridges the gap between food donors and recipients — reducing waste and fighting hunger in communities.
@@ -46,10 +46,9 @@
 | **Language** | Java 21 (LTS) |
 | **Framework** | Spring Boot 3.3.5 |
 | **Build Tool** | Maven 3.9+ |
-| **Security** | Spring Security 6 + JWT (Phase 2) |
+| **Security** | Spring Security 6 + JWT |
 | **ORM** | Spring Data JPA + Hibernate |
-| **Database** | PostgreSQL 16 |
-| **Migrations** | Flyway |
+| **Database** | MySQL 8.0 |
 | **API Docs** | SpringDoc OpenAPI 3 (Swagger UI) |
 | **Frontend** | React 18 + Vite 5 |
 | **Styling** | Tailwind CSS v3 |
@@ -133,9 +132,9 @@ docker compose up --build
 
 # 3. Access the application
 #    Frontend:  http://localhost:5173
-#    Backend:   http://localhost:8080
-#    Swagger:   http://localhost:8080/swagger-ui.html
-#    API Docs:  http://localhost:8080/api-docs
+#    Backend:   http://localhost:8081
+#    Swagger:   http://localhost:8081/api/swagger-ui.html
+#    API Docs:  http://localhost:8081/api/api-docs
 ```
 
 Stop all services:
@@ -152,15 +151,15 @@ docker compose down -v
 
 ### 💻 Option 2: Local Development
 
-**Step 1 — Start PostgreSQL**
+**Step 1 — Start MySQL (Docker)**
 ```bash
-# Using Docker for just the database
 docker run --name foodbridge-db \
-  -e POSTGRES_DB=foodbridge \
-  -e POSTGRES_USER=foodbridge \
-  -e POSTGRES_PASSWORD=foodbridge123 \
-  -p 5432:5432 \
-  -d postgres:16-alpine
+  -e MYSQL_ROOT_PASSWORD=rootpassword \
+  -e MYSQL_DATABASE=foodbridge \
+  -e MYSQL_USER=foodbridge \
+  -e MYSQL_PASSWORD=foodbridge123 \
+  -p 3306:3306 \
+  -d mysql:8.0
 ```
 
 **Step 2 — Start Backend**
@@ -178,9 +177,9 @@ npm run dev
 
 **URLs:**
 - Frontend: http://localhost:5173
-- Backend API: http://localhost:8080
-- Swagger UI: http://localhost:8080/swagger-ui.html
-- Health Check: http://localhost:8080/actuator/health
+- Backend API: http://localhost:8081
+- Swagger UI: http://localhost:8081/api/swagger-ui.html
+- Health Check: http://localhost:8081/api/actuator/health
 
 ---
 
@@ -189,12 +188,12 @@ npm run dev
 Interactive API documentation is available via **Swagger UI**:
 
 ```
-http://localhost:8080/swagger-ui.html
+http://localhost:8081/api/swagger-ui.html
 ```
 
 Raw OpenAPI JSON spec:
 ```
-http://localhost:8080/api-docs
+http://localhost:8081/api/api-docs
 ```
 
 ---
@@ -205,13 +204,12 @@ All sensitive configuration is managed via Spring profiles and environment varia
 
 | Variable | Default (dev) | Description |
 |---|---|---|
-| `DB_HOST` | `localhost` | PostgreSQL host |
-| `DB_PORT` | `5432` | PostgreSQL port |
-| `DB_NAME` | `foodbridge` | Database name |
-| `DB_USERNAME` | `foodbridge` | Database user |
-| `DB_PASSWORD` | `foodbridge123` | Database password |
-| `SERVER_PORT` | `8080` | Backend server port |
+| `MYSQL_URL` | `jdbc:mysql://localhost:3306/foodbridge` | MySQL JDBC URL |
+| `MYSQL_USERNAME` | `foodbridge` | MySQL user |
+| `MYSQL_PASSWORD` | `foodbridge123` | MySQL password |
+| `SERVER_PORT` | `8081` | Backend server port |
 | `SPRING_PROFILES_ACTIVE` | `dev` | Active Spring profile |
+| `JWT_SECRET` | (see application.yml) | JWT signing key |
 
 ---
 

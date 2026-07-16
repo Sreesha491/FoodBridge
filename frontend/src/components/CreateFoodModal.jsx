@@ -12,9 +12,9 @@ function CreateFoodModal({ isOpen, onClose, onSuccess }) {
     name: '',
     description: '',
     quantity: '',
-    quantityUnit: 'KG', // KG, PORTIONS, LITERS, BOXES
+    unit: 'KG', // KG, PORTIONS, LITERS, BOXES
     category: 'COOKED_FOOD', // COOKED_FOOD, RAW_INGREDIENTS, PACKAGED_GOODS, BAKERY, PRODUCE
-    expiryTime: '' // LocalDateTime format like '2023-12-01T15:30:00'
+    expiryDate: '' // datetime-local value e.g. '2023-12-01T15:30'
   });
   
   const [error, setError] = useState('');
@@ -37,12 +37,20 @@ function CreateFoodModal({ isOpen, onClose, onSuccess }) {
       return;
     }
     
-    // Build payload
+    // Build payload matching FoodItemRequest DTO exactly
+    // - unit:       maps to 'unit' field
+    // - expiryDate: must be ISO Instant (append Z for UTC)
+    const expiryISO = form.expiryDate
+      ? new Date(form.expiryDate).toISOString()
+      : null;
+
     const payload = {
-      ...form,
+      name: form.name,
+      description: form.description,
+      category: form.category,
       quantity: parseFloat(form.quantity),
-      // Append seconds if not provided by datetime-local input
-      expiryTime: form.expiryTime.length === 16 ? `${form.expiryTime}:00` : form.expiryTime
+      unit: form.unit,
+      expiryDate: expiryISO,
     };
 
     setIsLoading(true);
@@ -104,7 +112,7 @@ function CreateFoodModal({ isOpen, onClose, onSuccess }) {
               </div>
               <div className="form-group" style={{ flex: 1 }}>
                 <label htmlFor="food-unit" className="form-label">Unit *</label>
-                <select id="food-unit" name="quantityUnit" value={form.quantityUnit} onChange={handleChange} className="form-input select-input">
+                              <select id="food-unit" name="unit" value={form.unit} onChange={handleChange} className="form-input select-input">
                   <option value="KG">KG</option>
                   <option value="PORTIONS">Portions</option>
                   <option value="LITERS">Liters</option>
@@ -126,9 +134,9 @@ function CreateFoodModal({ isOpen, onClose, onSuccess }) {
               </div>
               <div className="form-group" style={{ flex: 1 }}>
                 <label htmlFor="food-expiry" className="form-label">Expiry Time *</label>
-                <input
-                  id="food-expiry" name="expiryTime" type="datetime-local" required
-                  value={form.expiryTime} onChange={handleChange} className="form-input"
+                                <input
+                  id="food-expiry" name="expiryDate" type="datetime-local" required
+                  value={form.expiryDate} onChange={handleChange} className="form-input"
                 />
               </div>
             </div>

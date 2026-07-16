@@ -19,9 +19,9 @@ function OrdersPage() {
     try {
       let res;
       if (user.role === 'NGO') {
-        res = await orderService.getOrdersByRecipient(user.id); // Usually the backend uses recipientId
+        res = await orderService.getOrdersByRecipient(user.userId);
       } else if (user.role === 'DONOR' || user.role === 'RESTAURANT') {
-        res = await orderService.getOrdersByDonor(user.id);
+        res = await orderService.getOrdersByDonor(user.userId);
       } else if (user.role === 'DELIVERY_PARTNER') {
         // Delivery partners might want to see all pending/ready orders, or their own
         // For simplicity, fetch all orders, but in a real app, they'd have a specific queue
@@ -41,11 +41,11 @@ function OrdersPage() {
 
   useEffect(() => {
     fetchOrders();
-  }, [user.id, user.role]);
+  }, [user.userId, user.role]);
 
   const handleUpdateStatus = async (orderId, newStatus) => {
     try {
-      await orderService.updateStatus(orderId, newStatus, user.id);
+      await orderService.updateStatus(orderId, newStatus, user.userId);
       fetchOrders();
     } catch (err) {
       alert(err.response?.data?.message || 'Failed to update order status.');
@@ -57,7 +57,7 @@ function OrdersPage() {
       if (order.status === 'CONFIRMED' || order.status === 'PREPARING') {
         return <button className="btn btn-sm btn-primary" onClick={() => handleUpdateStatus(order.id, 'OUT_FOR_DELIVERY')}>Pick Up for Delivery</button>;
       }
-      if (order.status === 'OUT_FOR_DELIVERY' && order.deliveryPartnerId === user.id) {
+      if (order.status === 'OUT_FOR_DELIVERY' && order.deliveryPartnerId === user.userId) {
         return <button className="btn btn-sm btn-success" onClick={() => handleUpdateStatus(order.id, 'DELIVERED')}>Mark Delivered</button>;
       }
     }
