@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import Navbar from '@/components/Navbar';
 
 // ─── Stat Card Component ───────────────────────────────────────────
 function StatCard({ value, label, icon }) {
@@ -116,9 +118,10 @@ function HomePage() {
 
   return (
     <>
-      {/* ════════════════════════════════════════════════════════════
-          SECTION 1 – HERO
-          ════════════════════════════════════════════════════════════ */}
+      {/* Global navigation with Sign In / Get Started buttons */}
+      <Navbar />
+
+      {/* ═══ SECTION 1 – HERO ═══════════════════════════════════════ */}
       <section
         id="hero"
         className="relative bg-hero-gradient noise-overlay pt-32 pb-24 overflow-hidden"
@@ -170,22 +173,22 @@ function HomePage() {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in">
-              <a
-                id="cta-donate"
-                href="#how-it-works"
+              <Link
+                id="cta-get-started"
+                to="/register"
                 className="btn-primary px-8 py-3 text-base"
-                aria-label="Start donating food"
+                aria-label="Create a free account"
               >
-                🍱 Donate Food
-              </a>
-              <a
-                id="cta-find"
-                href="#features"
+                🚀 Get Started Free
+              </Link>
+              <Link
+                id="cta-sign-in"
+                to="/login"
                 className="btn-outline px-8 py-3 text-base"
-                aria-label="Find available food donations"
+                aria-label="Sign in to your account"
               >
-                🔍 Find Food Near Me
-              </a>
+                🔑 Sign In
+              </Link>
             </div>
 
             {/* Trust badges */}
