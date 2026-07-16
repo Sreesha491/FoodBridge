@@ -32,7 +32,7 @@ function CreateFoodModal({ isOpen, onClose, onSuccess }) {
     setError('');
     
     // Basic validation
-    if (!form.name || !form.quantity || !form.expiryTime) {
+    if (!form.name || !form.quantity || !form.expiryDate) {
       setError('Please fill in all required fields.');
       return;
     }
