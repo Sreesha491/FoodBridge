@@ -38,15 +38,10 @@ export default defineConfig(({ mode }) => {
       strictPort: true,     // Fail if port is already in use
       open: false,          // Don't auto-open browser in Docker
 
-      // Proxy API calls to the Spring Boot backend
-      // Any request to /api/* is forwarded to the backend
+      // Proxy all /api/* requests to the Spring Boot backend.
+      // The backend has context-path /api, so /api/auth/login, /api/actuator/health, etc.
       proxy: {
         '/api': {
-          target: backendHost,
-          changeOrigin: true,
-          secure: false,
-        },
-        '/actuator': {
           target: backendHost,
           changeOrigin: true,
           secure: false,

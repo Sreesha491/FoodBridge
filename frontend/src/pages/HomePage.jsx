@@ -64,9 +64,9 @@ function HomePage() {
   const [apiStatus, setApiStatus] = useState('checking'); // 'checking' | 'online' | 'offline'
 
   // Check backend connectivity on mount
-  // Uses fetch() directly to hit /actuator/health via Vite proxy (not the /api prefix path)
+  // Backend context-path is /api, so actuator is at /api/actuator/health
   useEffect(() => {
-    fetch('/actuator/health')
+    fetch('/api/actuator/health')
       .then((res) => {
         if (res.ok) setApiStatus('online');
         else setApiStatus('offline');
